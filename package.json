@@ -1,0 +1,15 @@
+{
+  "name": "my-api",
+  "version": "1.0.0",
+  "description": "Improving this goofy ahh security",
+  "main": "api.js",
+  "scripts": {
+    "start": "node api.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.5",
+    "body-parser": "^1.20.2",
+    "express": "^4.21.1",
+    "discord.js": "^14.16.3"
+  }
+}
