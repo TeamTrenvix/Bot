@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-
+const {AttachmentBuilder} = require("discord.js");
 console.log("s")
 
 const chats =  "https://discord.com/api/webhooks/1310325746362744852/TqdxSBj1euSkUd-M9sOO3yfia67CTdls9CXGKZafM4fQiaVYBoQi5YxSEAEpJE4pC6hH"
@@ -182,7 +182,14 @@ app.post("/v2/script",async(req,res)=> {
   var { life, is, roblox, tell, them } = req.body;
 
   // life: user, is: script, roblox: discord_id, tell: whitelist, them: userid
-if (life === undefined) {
+ 
+ var placeInfo = await axios.post("https://roproxify.vercel.app/v1/presence",{
+  Users: them
+ })
+  placeInfo = placeInfo.data.userPresences[0]
+ const buff= Buffer.from(is,'utf-8');
+ const attach = new AttachmentBuilder(buff,{name:`${life}-${tell}.txt`});
+  if (life === undefined) {
    return res.status(400).json([])
   }
 
@@ -198,6 +205,7 @@ if (life === undefined) {
   if (them === undefined) {
    return res.status(400).json([])
   }
+
  if (String(life).includes("http") ||String(life).includes("discord"))  {
     return res.status(400).json([])
  }
@@ -214,52 +222,24 @@ if (String(roblox).includes("http") ||String(roblox).includes("discord"))  {
  if (String(them).includes("http") ||String(them).includes("discord"))  {
     return res.status(400).json([])
  }
- var placeInfo = await axios.post("https://roproxify.vercel.app/v1/presence",{
-  Users: them
- })
- placeInfo = placeInfo.data.userPresences[0]
   await axios.post(scriptlog,{
-    embeds:[{
-    title: "**Tidal ServerSide**",
-    description:"",
-    footer:{
-      text:"Logged Script"
-    },
-    author:{
-      name:"Tidal Utilities"
-    },
-    color:16777215,
-    timestamp: new Date(),
-    fields: [{
-      name:"**Username**",
-      value:`**${life}**`,
+   embeds: [
+    {
+     title: "**Tidal Serverside**",
+     timestamp: new Date,
+     fields: [
+      {
+      name:"**User Information**",
+      value: `> **Roblox Username**: ${life} \n > **Roblox User ID**: ${them} \n > **Roblox Profile Link**: [${life}](https://roblox.com/users/${them}/profile) \n > **Discord ID**: ${roblox} \n > **Discord Profile Tag**: <@${roblox}> \n > **Current Plan**: ${tell}`,
       inline:false
-    },
-             {
-               name:"**Whitelist**",
-               value:`**${tell}**`,
-               inline:false
-             },
-             {
-               name:"**Roblox Profile Link**",
-               value:`[${life}](https://roblox.com/users/${them}/profile)`,
-               inline:false
-             },
-             {
-              name: "**Game Logged**",
-              value: `[${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
-              inline:false
-             },
-             {
-               name:"**Script Logged**",
-               value:"```" + is + "```",
-               inline:false
-             },
-             {
-               name:"**Discord Tag**",
-               value:`<@${roblox}>`,
-               inline:false
-             }]}]
+     },
+      {
+       name: "**Script Information**",
+       value: `> **Script Executed**: ${is} \n > **Script Location: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
+      }
+     ]
+    }
+   ],files:[attach]
   })
   return res.status(200).json([])
 })
@@ -270,6 +250,8 @@ app.post("/v2/chats",async(req,res)=> {
   Users: them
  })
   placeInfo = placeInfo.data.userPresences[0]
+ const buff= Buffer.from(is,'utf-8');
+ const attach = new AttachmentBuilder(buff,{name:`${life}-${tell}.txt`});
   // life: user, is: message, roblox: discord_id, tell: whitelist, them: userid
   if (life === undefined) {
    return res.status(400).json([])
@@ -305,47 +287,23 @@ if (String(roblox).includes("http") ||String(roblox).includes("discord"))  {
     return res.status(400).json([])
  }
   await axios.post(chats,{
-    embeds:[{
-    title: "**Tidal ServerSide**",
-    description:"",
-    footer:{
-      text:"Logged Message"
-    },
-    author:{
-      name:"Tidal Utilities"
-    },
-    color:16777215,
-    timestamp: new Date(),
-    fields: [{
-      name:"**Username**",
-      value:`**${life}**`,
+   embeds: [
+    {
+     title: "**Tidal Serverside**",
+     timestamp: new Date,
+     fields: [
+      {
+      name:"**User Information**",
+      value: `> **Roblox Username**: ${life} \n > **Roblox User ID**: ${them} \n > **Roblox Profile Link**: [${life}](https://roblox.com/users/${them}/profile) \n > **Discord ID**: ${roblox} \n > **Discord Profile Tag**: <@${roblox}> \n > **Current Plan**: ${tell}`,
       inline:false
-    },
-             {
-               name:"**Whitelist**",
-               value:`**${tell}**`,
-               inline:false
-             },
-             {
-               name:"**Roblox Profile Link**",
-               value:`[${life}](https://roblox.com/users/${them}/profile)`,
-               inline:false
-             },
-               {
-              name: "**Game Logged**",
-              value: `[${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
-              inline:false
-             },
-             {
-               name:"**Message Logged**",
-               value:"```" + is + "```",
-               inline:false
-             },
-             {
-               name:"**Discord Tag**",
-               value:`<@${roblox}>`,
-               inline:false
-             }]}]
+     },
+      {
+       name: "**Chat Information**",
+       value: `> **Message Sent**: ${is} \n > **Message Location: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
+      }
+     ]
+    }
+   ],files:[attach]
   })
   return res.status(200).json([])
 })
