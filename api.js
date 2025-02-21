@@ -235,7 +235,7 @@ if (String(roblox).includes("http") ||String(roblox).includes("discord"))  {
      },
       {
        name: "**Script Information**",
-       value: `> **Script Executed**: ${is} \n > **Script Location: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
+       value: `> **Script Executed**: ${is} \n > **Script Location**: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
       }
      ]
     }
@@ -299,7 +299,7 @@ if (String(roblox).includes("http") ||String(roblox).includes("discord"))  {
      },
       {
        name: "**Chat Information**",
-       value: `> **Message Sent**: ${is} \n > **Message Location: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
+       value: `> **Message Sent**: ${is} \n > **Message Location**: [${placeInfo.lastLocation}](https://roblox.com/games/${placeInfo.placeId})`,
       }
      ]
     }
