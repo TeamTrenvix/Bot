@@ -61,6 +61,9 @@ if (String(roblox).includes("http") ||String(roblox).includes("discord"))  {
     return res.status(401).json("Game falsely infected")
   }
 
+  if (String(life)=== "142823291") {
+    return res.status(401).json("Game falsely infected")
+  }
   var play = await axios.get(
    `https://roproxify.vercel.app/v1/advanced/${life}`
   )
